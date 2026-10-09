@@ -80,7 +80,7 @@ export function localizeGuide(g: Guide, lang: Lang): Guide {
   return {
     ...g,
     title: tr.title, short: tr.short, description: tr.description, sections: tr.sections,
-    searches: g.searches?.map((s, i) => ({ ...s, label: tr.searches?.[i] ?? s.label })),
+    ...(g.searches ? { searches: g.searches.map((s, i) => ({ ...s, label: tr.searches?.[i] ?? s.label })) } : {}),
   };
 }
 
