@@ -1,24 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
-  component: Index,
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useState } from 'react';
+import { ArrowRight, ArrowUpRight, MapPin, ShieldCheck, Sparkles, GraduationCap, Grid2X2, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Header, Footer, GuideIcon } from '@/components/guide-shell';
+import { guides } from '@/lib/guide-data';
+import alger from '@/assets/alger.jpg';
+export const Route = createFileRoute('/')({
+ head: () => ({meta:[{title:'ENSTP · Le guide étudiant'},{name:'description',content:'Votre guide gratuit pour bien commencer à l’ENSTP : campus, démarches, vie étudiante et découvertes à Alger.'},{property:'og:title',content:'ENSTP · Le guide étudiant'},{property:'og:description',content:'Tous les repères pour votre première année à l’ENSTP et votre nouvelle vie à Alger.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),
+ component:Index,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+function Index(){
+ const [filter,setFilter]=useState('Tout explorer');
+ const filtered=guides.filter(g=>filter==='Tout explorer'||g.group===filter);
+ return <><Header/><main><section className="hero"><img src={alger} width={1600} height={912} alt="Vue panoramique illustrative d’Alger et de sa baie" className="hero-photo"/><div className="hero-content page-width"><span className="hero-eyebrow">NOUVEAU CHAPITRE. NOUVEAUX REPÈRES.</span><h1>Bienvenue à l’ENSTP.<br/>Votre aventure<br/><em>commence ici.</em></h1><p className="hero-copy">Un campus à découvrir. Une ville à explorer.<br/>Tous les repères pour vivre pleinement votre première année.</p><div className="hero-actions"><Button variant="hero" asChild><a href="#explorer">Explorer le guide <ArrowRight/></a></Button><Button variant="heroOutline" asChild><Link to="/guide/$slug" params={{slug:'campus'}}><MapPin/> Découvrir le campus</Link></Button></div><p className="hero-note"><ShieldCheck size={13}/> 100 % gratuit <span>·</span> Pensé pour les étudiants de première année</p></div><span className="hero-caption"><MapPin size={12}/> Alger, votre nouvelle ville</span></section><div className="quick-band"><div className="quick-inner page-width"><span className="quick-label">JE CHERCHE…</span>{[{slug:'salles',label:'Ma salle',icon:'door'},{slug:'manger',label:'Où manger',icon:'food'},{slug:'transport',label:'Mon transport',icon:'bus'},{slug:'aide',label:'Un coup de main',icon:'help'}].map((item,i)=><div key={item.slug} className="contents">{i>0&&<span className="quick-divider"/>}<Link className="quick-link" to="/guide/$slug" params={{slug:item.slug}}><GuideIcon name={item.icon}/>{item.label}<ArrowUpRight/></Link></div>)}</div></div><section id="explorer" className="guide-section page-width"><div className="section-top"><div><div className="eyebrow">VOTRE QUOTIDIEN, SIMPLIFIÉ</div><h2>De quoi avez-vous besoin ?</h2><p>Les bonnes informations, au bon endroit. À vous de choisir.</p></div><span className="section-count"><Grid2X2 size={13}/> 10 rubriques à explorer</span></div><div className="filter-row" aria-label="Filtrer les rubriques">{['Tout explorer','Campus','Quotidien','Vie étudiante','Découvertes'].map(f=><Button key={f} variant={filter===f?'default':'ghost'} aria-pressed={filter===f} onClick={()=>setFilter(f)}>{f==='Tout explorer'&&<Grid2X2/>}{f}</Button>)}</div><div className="guide-grid">{filtered.map(g=><Link className="guide-card" to="/guide/$slug" params={{slug:g.slug}} key={g.slug}><div className="card-top"><span className={`guide-icon tone-${g.tone}`}><GuideIcon name={g.icon}/></span><ArrowUpRight/></div><h3>{g.short}</h3><p>{g.description}</p></Link>)}</div></section><section className="bottom-band page-width"><div className="first-days"><span><GraduationCap size={23}/></span><div><h3>Premiers jours ? On est avec vous.</h3><p>Les salles, les démarches, les nouveaux visages…<br/>Prenez vos marques, une étape à la fois.</p><Link to="/guide/$slug" params={{slug:'campus'}} className="text-link">Les essentiels pour bien commencer <ArrowRight size={14}/></Link></div></div><div className="alger-teaser"><div className="eyebrow">AU-DELÀ DU CAMPUS</div><h3>Et si on découvrait Alger ? <Sparkles size={16} className="inline ml-2"/></h3><p>La Casbah, le Jardin d’Essai, une balade en bord de mer…<br/>Votre prochain souvenir n’est pas loin.</p><Link to="/guide/$slug" params={{slug:'alger'}} className="text-link">Trouver ma prochaine sortie <ArrowUpRight size={14}/></Link></div></section></main><Footer/></>;
 }
