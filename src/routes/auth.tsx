@@ -9,9 +9,9 @@ export const Route = createFileRoute('/auth')({
   head: () => ({
     meta: [
       { title: 'Compte étudiant · ENSTP Go' },
-      { name: 'description', content: 'Créez votre compte ENSTP Go avec votre email d’école @enstp.edu.dz.' },
+      { name: 'description', content: 'Créez votre compte ENSTP Go avec votre email d’école ou personnel.' },
       { property: 'og:title', content: 'Compte étudiant · ENSTP Go' },
-      { property: 'og:description', content: 'Inscription réservée aux étudiants avec un email @enstp.edu.dz.' },
+      { property: 'og:description', content: 'Inscription et connexion des étudiants ENSTP Go.' },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary' },
     ],
