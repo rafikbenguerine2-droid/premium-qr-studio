@@ -23,6 +23,7 @@ export type Database = {
           full_name: string
           id: string
           last_name: string
+          specialty: string
           study_year: string
         }
         Insert: {
@@ -33,6 +34,7 @@ export type Database = {
           full_name?: string
           id: string
           last_name?: string
+          specialty?: string
           study_year?: string
         }
         Update: {
@@ -43,6 +45,7 @@ export type Database = {
           full_name?: string
           id?: string
           last_name?: string
+          specialty?: string
           study_year?: string
         }
         Relationships: []

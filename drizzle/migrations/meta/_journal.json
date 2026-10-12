@@ -15,6 +15,13 @@
       "when": 1791833926148,
       "tag": "0001_profiles_extend_and_open_signup",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791835417512,
+      "tag": "0002_profiles_specialty",
+      "breakpoints": true
     }
   ]
 }
