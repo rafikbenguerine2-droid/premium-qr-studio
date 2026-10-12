@@ -8,6 +8,13 @@
       "when": 1791642868142,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791833926148,
+      "tag": "0001_profiles_extend_and_open_signup",
+      "breakpoints": true
     }
   ]
 }

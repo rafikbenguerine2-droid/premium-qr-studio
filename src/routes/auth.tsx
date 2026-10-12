@@ -9,9 +9,9 @@ export const Route = createFileRoute('/auth')({
   head: () => ({
     meta: [
       { title: 'Compte étudiant · ENSTP Go' },
-      { name: 'description', content: 'Créez votre compte ENSTP Go avec votre email d’école @enstp.edu.dz.' },
+      { name: 'description', content: 'Créez votre compte ENSTP Go avec votre email d’école ou personnel.' },
       { property: 'og:title', content: 'Compte étudiant · ENSTP Go' },
-      { property: 'og:description', content: 'Inscription réservée aux étudiants avec un email @enstp.edu.dz.' },
+      { property: 'og:description', content: 'Inscription et connexion des étudiants ENSTP Go.' },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary' },
     ],
@@ -19,44 +19,79 @@ export const Route = createFileRoute('/auth')({
   component: AuthPage,
 });
 
-const DOMAIN = '@enstp.edu.dz';
+const YEARS = [
+  '1ère année (Classe Préparatoire)',
+  '2ème année (Classe Préparatoire)',
+  '3ème année (Spécialité DIB ou DMS)',
+  '4ème année (Spécialité DIB ou DMS)',
+  '5ème année (Spécialité DIB ou DMS)',
+];
 const txt = {
-  fr: { title: 'Mon compte étudiant', sub: 'Réservé aux étudiants : utilisez votre email d’école.', up: 'Créer un compte', in: 'Me connecter', name: 'Nom complet', year: 'Année / filière', email: 'Email d’école', ph: `prenom.nom${DOMAIN}`, pass: 'Mot de passe (8 caractères min.)', bad: `Utilisez votre email d’école (${DOMAIN}).`, check: 'Vérifiez votre boîte mail : cliquez sur le lien de confirmation pour activer votre compte.', hi: 'Bonjour', out: 'Me déconnecter', home: 'Retour au guide', wait: '…', fail: 'Une erreur est survenue. Vérifiez vos informations.', short: 'Mot de passe trop court.' },
-  en: { title: 'My student account', sub: 'Students only: use your school email.', up: 'Create account', in: 'Sign in', name: 'Full name', year: 'Year / major', email: 'School email', ph: `first.last${DOMAIN}`, pass: 'Password (8+ characters)', bad: `Use your school email (${DOMAIN}).`, check: 'Check your inbox: click the confirmation link to activate your account.', hi: 'Hello', out: 'Sign out', home: 'Back to the guide', wait: '…', fail: 'Something went wrong. Check your details.', short: 'Password too short.' },
-  ar: { title: 'حسابي الطلابي', sub: 'للطلبة فقط: استعمل بريد المدرسة الإلكتروني.', up: 'إنشاء حساب', in: 'تسجيل الدخول', name: 'الاسم الكامل', year: 'السنة / التخصص', email: 'بريد المدرسة', ph: `name${DOMAIN}`, pass: 'كلمة المرور (8 أحرف على الأقل)', bad: `استعمل بريد المدرسة (${DOMAIN}).`, check: 'تحقق من بريدك: اضغط على رابط التأكيد لتفعيل حسابك.', hi: 'مرحبًا', out: 'تسجيل الخروج', home: 'العودة إلى الدليل', wait: '…', fail: 'حدث خطأ. تحقق من معلوماتك.', short: 'كلمة المرور قصيرة جدًا.' },
+  fr: { title: 'Mon compte étudiant', sub: 'Email d’école ou personnel accepté.', up: 'S’inscrire', in: 'Se connecter', first: 'Prénom', last: 'Nom', year: 'Année d’étude', pick: 'Choisir…', email: 'Email', pass: 'Mot de passe (8 caractères min.)', bad: 'Adresse email invalide.', check: 'Compte créé ! Cliquez sur le lien de confirmation reçu par email, puis connectez-vous.', resend: 'Renvoyer l’email de confirmation', resent: 'Email de confirmation renvoyé.', unconf: 'Votre email n’est pas encore confirmé. Cliquez sur le lien reçu ou renvoyez l’email.', hi: 'Bonjour', out: 'Se déconnecter', home: 'Retour au guide', wait: '…', fail: 'Email ou mot de passe incorrect.', failUp: 'Inscription impossible. Cet email est peut-être déjà utilisé.', short: 'Mot de passe trop court.', rate: 'Trop de tentatives, réessayez dans une minute.' },
+  en: { title: 'My student account', sub: 'School or personal email accepted.', up: 'Sign up', in: 'Log in', first: 'First name', last: 'Last name', year: 'Academic year', pick: 'Choose…', email: 'Email', pass: 'Password (8+ characters)', bad: 'Invalid email address.', check: 'Account created! Click the confirmation link in your email, then log in.', resend: 'Resend confirmation email', resent: 'Confirmation email sent again.', unconf: 'Your email is not confirmed yet. Click the link you received or resend it.', hi: 'Hello', out: 'Log out', home: 'Back to the guide', wait: '…', fail: 'Wrong email or password.', failUp: 'Sign-up failed. This email may already be in use.', short: 'Password too short.', rate: 'Too many attempts, try again in a minute.' },
+  ar: { title: 'حسابي الطلابي', sub: 'يُقبل بريد المدرسة أو البريد الشخصي.', up: 'إنشاء حساب', in: 'تسجيل الدخول', first: 'الاسم', last: 'اللقب', year: 'السنة الدراسية', pick: 'اختر…', email: 'البريد الإلكتروني', pass: 'كلمة المرور (8 أحرف على الأقل)', bad: 'بريد إلكتروني غير صالح.', check: 'تم إنشاء الحساب! اضغط على رابط التأكيد في بريدك ثم سجّل الدخول.', resend: 'إعادة إرسال بريد التأكيد', resent: 'تمت إعادة إرسال بريد التأكيد.', unconf: 'بريدك غير مؤكد بعد. اضغط على الرابط أو أعد إرساله.', hi: 'مرحبًا', out: 'تسجيل الخروج', home: 'العودة إلى الدليل', wait: '…', fail: 'البريد أو كلمة المرور غير صحيحة.', failUp: 'تعذّر التسجيل. ربما هذا البريد مستعمل.', short: 'كلمة المرور قصيرة جدًا.', rate: 'محاولات كثيرة، أعد المحاولة بعد دقيقة.' },
 };
 
 function AuthPage() {
   const { lang } = useLang();
   const s = txt[lang];
-  const [mode, setMode] = useState<'up' | 'in'>('up');
-  const [name, setName] = useState('');
+  const [mode, setMode] = useState<'up' | 'in'>('in');
+  const [first, setFirst] = useState('');
+  const [last, setLast] = useState('');
   const [year, setYear] = useState('');
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [showResend, setShowResend] = useState(false);
+  const [user, setUser] = useState<{ email: string; name: string } | null>(null);
+
+  async function loadUser() {
+    const { data } = await supabase.auth.getUser();
+    const u = data.user;
+    if (!u || !u.email_confirmed_at) return setUser(null);
+    const { data: p } = await supabase.from('profiles').select('first_name,last_name').eq('id', u.id).maybeSingle();
+    setUser({ email: u.email ?? '', name: p ? `${p.first_name} ${p.last_name}`.trim() : '' });
+  }
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUserEmail(data.user?.email ?? null));
-    const { data } = supabase.auth.onAuthStateChange((_e, session) => setUserEmail(session?.user?.email ?? null));
+    loadUser();
+    const { data } = supabase.auth.onAuthStateChange((e) => {
+      if (e === 'SIGNED_IN' || e === 'SIGNED_OUT' || e === 'USER_UPDATED') setTimeout(loadUser, 0);
+    });
     return () => data.subscription.unsubscribe();
   }, []);
+
+  const mail = email.trim().toLowerCase();
+
+  async function resend() {
+    setBusy(true);
+    const { error } = await supabase.auth.resend({ type: 'signup', email: mail, options: { emailRedirectTo: `${window.location.origin}/auth` } });
+    setMsg(error ? { ok: false, text: error.status === 429 ? s.rate : s.fail } : { ok: true, text: s.resent });
+    setBusy(false);
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
     setMsg(null);
-    const mail = email.trim().toLowerCase();
-    if (!mail.endsWith(DOMAIN) || mail.length <= DOMAIN.length) return setMsg({ ok: false, text: s.bad });
+    setShowResend(false);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) || mail.length > 255) return setMsg({ ok: false, text: s.bad });
     if (pass.length < 8) return setMsg({ ok: false, text: s.short });
     setBusy(true);
     if (mode === 'up') {
-      const { error } = await supabase.auth.signUp({ email: mail, password: pass, options: { emailRedirectTo: window.location.origin, data: { full_name: name.trim(), study_year: year.trim() } } });
-      setMsg(error ? { ok: false, text: s.fail } : { ok: true, text: s.check });
+      const { error } = await supabase.auth.signUp({
+        email: mail, password: pass,
+        options: { emailRedirectTo: `${window.location.origin}/auth`, data: { first_name: first.trim().slice(0, 80), last_name: last.trim().slice(0, 80), academic_year: year } },
+      });
+      if (error) setMsg({ ok: false, text: error.status === 429 ? s.rate : s.failUp });
+      else { setMsg({ ok: true, text: s.check }); setShowResend(true); setMode('in'); }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email: mail, password: pass });
-      if (error) setMsg({ ok: false, text: s.fail });
+      if (error) {
+        const unconf = error.code === 'email_not_confirmed' || /confirm/i.test(error.message);
+        setMsg({ ok: false, text: unconf ? s.unconf : error.status === 429 ? s.rate : s.fail });
+        setShowResend(unconf);
+      }
     }
     setBusy(false);
   }
@@ -67,9 +102,9 @@ function AuthPage() {
       <main className="auth-page">
         <section className="auth-card">
           <h1>{s.title}</h1>
-          {userEmail ? (
+          {user ? (
             <>
-              <p>{s.hi}, <strong dir="ltr">{userEmail}</strong></p>
+              <p>{s.hi}{user.name ? `, ${user.name}` : ''} — <strong dir="ltr">{user.email}</strong></p>
               <div className="auth-actions">
                 <Button asChild><Link to="/">{s.home}</Link></Button>
                 <Button variant="outline" onClick={() => supabase.auth.signOut()}>{s.out}</Button>
@@ -79,20 +114,27 @@ function AuthPage() {
             <>
               <p>{s.sub}</p>
               <div className="lang-switch auth-tabs" role="tablist">
-                <button type="button" className={mode === 'up' ? 'lang-active' : ''} onClick={() => setMode('up')}>{s.up}</button>
                 <button type="button" className={mode === 'in' ? 'lang-active' : ''} onClick={() => setMode('in')}>{s.in}</button>
+                <button type="button" className={mode === 'up' ? 'lang-active' : ''} onClick={() => setMode('up')}>{s.up}</button>
               </div>
               <form onSubmit={submit} className="auth-form">
                 {mode === 'up' && (
                   <>
-                    <label>{s.name}<input required maxLength={120} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" /></label>
-                    <label>{s.year}<input required maxLength={120} value={year} onChange={(e) => setYear(e.target.value)} /></label>
+                    <label>{s.first}<input required maxLength={80} value={first} onChange={(e) => setFirst(e.target.value)} autoComplete="given-name" /></label>
+                    <label>{s.last}<input required maxLength={80} value={last} onChange={(e) => setLast(e.target.value)} autoComplete="family-name" /></label>
+                    <label>{s.year}
+                      <select required value={year} onChange={(e) => setYear(e.target.value)}>
+                        <option value="" disabled>{s.pick}</option>
+                        {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
+                      </select>
+                    </label>
                   </>
                 )}
-                <label>{s.email}<input required type="email" dir="ltr" placeholder={s.ph} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" /></label>
+                <label>{s.email}<input required type="email" dir="ltr" maxLength={255} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" /></label>
                 <label>{s.pass}<input required type="password" dir="ltr" value={pass} onChange={(e) => setPass(e.target.value)} autoComplete={mode === 'up' ? 'new-password' : 'current-password'} /></label>
                 <Button type="submit" disabled={busy}>{busy ? s.wait : mode === 'up' ? s.up : s.in}</Button>
                 {msg && <p role="status" className={msg.ok ? 'auth-ok' : 'auth-err'}>{msg.text}</p>}
+                {showResend && mail && <Button type="button" variant="outline" disabled={busy} onClick={resend}>{s.resend}</Button>}
               </form>
             </>
           )}
